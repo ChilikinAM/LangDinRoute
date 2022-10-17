@@ -1,25 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
+import Layout from "./pages/layout";
+import Main from "./pages/main";
+import Other from "./pages/other";
+import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+    const [lang, setLang] = useState('ru')
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        navigate(`/${lang}/${window.location.pathname.substr(4)}`)
+        }, [lang]
+    )
+
+    return (
+          <>
+              <Routes>
+                  <Route path='/' element={<Navigate to={`/${lang}`} />} />
+                  <Route path='/:lang' element={<Layout setLang={setLang} />}>
+                      <Route index element={<Main />} />
+                      <Route path='other' element={<Other />} />
+                  </Route>
+              </Routes>
+          </>
+  )
 }
 
-export default App;
+export default App
